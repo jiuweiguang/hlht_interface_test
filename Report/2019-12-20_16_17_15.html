@@ -1,0 +1,1321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动化测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.9.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.common.min.js"></script>
+    <!-- <script type="text/javascript" src="js/echarts.common.min.js"></script> -->
+    
+    
+<style type="text/css" media="screen">
+    body        { font-family: Microsoft YaHei,Consolas,arial,sans-serif; font-size: 80%; }
+    table       { font-size: 100%; }
+    pre         { white-space: pre-wrap;word-wrap: break-word; }
+
+    /* -- heading ---------------------------------------------------------------------- */
+    h1 {
+        font-size: 16pt;
+        color: gray;
+    }
+    .heading {
+        margin-top: 0ex;
+        margin-bottom: 1ex;
+    }
+
+    .heading .attribute {
+        margin-top: 1ex;
+        margin-bottom: 0;
+    }
+
+    .heading .description {
+        margin-top: 2ex;
+        margin-bottom: 3ex;
+    }
+
+    /* -- css div popup ------------------------------------------------------------------------ */
+    a.popup_link {
+    }
+
+    a.popup_link:hover {
+        color: red;
+    }
+
+    .popup_window {
+        display: none;
+        position: relative;
+        left: 0px;
+        top: 0px;
+        /*border: solid #627173 1px; */
+        padding: 10px;
+        /*background-color: #E6E6D6; */
+        font-family: "Lucida Console", "Courier New", Courier, monospace;
+        text-align: left;
+        font-size: 8pt;
+        /* width: 500px;*/
+    }
+
+    }
+    /* -- report ------------------------------------------------------------------------ */
+    #show_detail_line {
+        margin-top: 3ex;
+        margin-bottom: 1ex;
+    }
+    #result_table {
+        width: 99%;
+    }
+    #header_row {
+        font-weight: bold;
+        color: #303641;
+        background-color: #ebebeb;
+    }
+    #total_row  { font-weight: bold; }
+    .passClass  { background-color: #bdedbc; }
+    .failClass  { background-color: #ffefa4; }
+    .errorClass { background-color: #ffc9c9; }
+    .passCase   { color: #6c6; }
+    .failCase   { color: #FF6600; font-weight: bold; }
+    .errorCase  { color: #c00; font-weight: bold; }
+    .hiddenRow  { display: none; }
+    .testcase   { margin-left: 2em; }
+
+
+    /* -- ending ---------------------------------------------------------------------- */
+    #ending {
+    }
+
+    #div_base {
+                position:absolute;
+                top:0%;
+                left:5%;
+                right:5%;
+                width: auto;
+                height: auto;
+                margin: -15px 0 0 0;
+    }
+</style>
+
+    
+</head>
+<body>
+    <script language="javascript" type="text/javascript"><!--
+    output_list = Array();
+
+    /* level - 0:Summary; 1:Failed; 2:All */
+    function showCase(level) {
+        trs = document.getElementsByTagName("tr");
+        for (var i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            id = tr.id;
+            if (id.substr(0,2) == 'ft') {
+                if (level < 1) {
+                    tr.className = 'hiddenRow';
+                }
+                else {
+                    tr.className = '';
+                }
+            }
+            if (id.substr(0,2) == 'pt') {
+                if (level > 1) {
+                    tr.className = '';
+                }
+                else {
+                    tr.className = 'hiddenRow';
+                }
+            }
+        }
+    }
+
+
+    function showClassDetail(cid, count) {
+        var id_list = Array(count);
+        var toHide = 1;
+        for (var i = 0; i < count; i++) {
+            tid0 = 't' + cid.substr(1) + '.' + (i+1);
+            tid = 'f' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'p' + tid0;
+                tr = document.getElementById(tid);
+            }
+            id_list[i] = tid;
+            if (tr.className) {
+                toHide = 0;
+            }
+        }
+        for (var i = 0; i < count; i++) {
+            tid = id_list[i];
+            if (toHide) {
+                document.getElementById('div_'+tid).style.display = 'none'
+                document.getElementById(tid).className = 'hiddenRow';
+            }
+            else {
+                document.getElementById(tid).className = '';
+            }
+        }
+    }
+
+
+    function showTestDetail(div_id){
+        var details_div = document.getElementById(div_id)
+        var displayState = details_div.style.display
+        // alert(displayState)
+        if (displayState != 'block' ) {
+            displayState = 'block'
+            details_div.style.display = 'block'
+        }
+        else {
+            details_div.style.display = 'none'
+        }
+    }
+
+
+    function html_escape(s) {
+        s = s.replace(/&/g,'&amp;');
+        s = s.replace(/</g,'&lt;');
+        s = s.replace(/>/g,'&gt;');
+        return s;
+    }
+
+    /* obsoleted by detail in <div>
+    function showOutput(id, name) {
+        var w = window.open("", //url
+                        name,
+                        "resizable,scrollbars,status,width=800,height=450");
+        d = w.document;
+        d.write("<pre>");
+        d.write(html_escape(output_list[id]));
+        d.write("\n");
+        d.write("<a href='javascript:window.close()'>close</a>\n");
+        d.write("</pre>\n");
+        d.close();
+    }
+    */
+    --></script>
+
+    <div id="div_base">
+        
+    <div class='page-header'>
+        <h1>自动化测试报告</h1>
+    <p class='attribute'><strong>开始时间:</strong> 2019-12-20 16:17:18</p>
+<p class='attribute'><strong>运行时长:</strong> 0:00:21.410124</p>
+<p class='attribute'><strong>状态:</strong> 通过 1</p>
+
+    </div>
+    <div style="float: left;width:50%;"><p class='description'>测试报告</p></div>
+    <div id="chart" style="width:50%;height:400px;float:left;"></div>
+
+        
+    <div class="btn-group btn-group-sm">
+        <button class="btn btn-default" onclick='javascript:showCase(0)'>总结</button>
+        <button class="btn btn-default" onclick='javascript:showCase(1)'>失败</button>
+        <button class="btn btn-default" onclick='javascript:showCase(2)'>全部</button>
+    </div>
+    <p></p>
+    <table id='result_table' class="table table-bordered">
+        <colgroup>
+            <col align='left' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+        </colgroup>
+        <tr id='header_row'>
+            <td>测试套件/测试用例</td>
+            <td>总数</td>
+            <td>通过</td>
+            <td>失败</td>
+            <td>错误</td>
+            <td>查看</td>
+        </tr>
+        
+    <tr class='passClass'>
+        <td>case.test_query_token.query_token</td>
+        <td>1</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c1',1)">详情</a></td>
+    </tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_one_equation</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a>
+
+    <div id='div_pt1.1' class="popup_window">
+        <pre>pt1.1: 插入数据库成功
+200 {'data': {'billPayNo': '910166432'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166371'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166429'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166336'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166424'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166381'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166412'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166446'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166425'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166388'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166417'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166486'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166470'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166485'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166469'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166457'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166476'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166407'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166494'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166374'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166423'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166442'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166392'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166395'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166367'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166376'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166383'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166399'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166443'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166447'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166406'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166384'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166468'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166431'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166448'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166467'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166449'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166496'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166434'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166351'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166356'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166439'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166353'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166380'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166355'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166404'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166450'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166498'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166368'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166396'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166390'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166362'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166366'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166478'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166387'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166480'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166481'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166411'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166409'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166437'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166402'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166391'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166440'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166489'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166421'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166436'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166418'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166453'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166375'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166428'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166465'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166426'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166459'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166482'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166471'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166488'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166493'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166405'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166379'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166430'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166504'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166398'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166473'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166441'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166358'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166456'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166363'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166455'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166385'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166386'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166369'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166460'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166372'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166364'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166377'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166393'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166444'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166420'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166401'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166484'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166499'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166451'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166495'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166419'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166394'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166491'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166438'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166462'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166361'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166370'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166389'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166464'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166400'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166414'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166410'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166474'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166479'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166357'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166413'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166416'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166475'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166408'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166487'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166472'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166461'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166433'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166427'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166373'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166382'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166510'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166503'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166397'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166445'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166497'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166505'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166378'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166490'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166466'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166483'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166509'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166535'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166534'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166354'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166403'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166516'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166365'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166463'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166506'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166517'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166526'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166422'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166519'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166415'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166359'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166565'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166550'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166477'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166546'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166561'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166452'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166532'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166554'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166435'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166492'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166599'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166543'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166584'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166573'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166614'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166515'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166500'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166580'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166588'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166571'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166570'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166536'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166557'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166541'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166585'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166508'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166507'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166605'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166597'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166577'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166603'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166551'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166595'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166513'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166592'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166529'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166606'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166615'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166616'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166643'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166538'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166518'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166525'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166522'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166547'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166527'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166520'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166544'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166613'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166647'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166620'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166617'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166589'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166626'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166631'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166601'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166632'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166635'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166514'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166566'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166548'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166638'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166563'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166564'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166533'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166501'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166560'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166512'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166562'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166575'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166619'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166648'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166502'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166609'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166530'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166556'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166559'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166594'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166578'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166622'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166511'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166602'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166524'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166587'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166591'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166583'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166553'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166539'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166531'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166582'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166523'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166593'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166542'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166608'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166611'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166537'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166642'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166540'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166568'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166639'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166521'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166558'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166607'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166636'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166630'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166649'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166646'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166574'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166623'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166653'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166572'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166641'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166549'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166658'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166567'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166581'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166680'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166655'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166600'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166576'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166669'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166552'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166579'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166528'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166650'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166586'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166674'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166610'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166628'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166624'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166684'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166687'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166634'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166644'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166660'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166621'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166671'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166618'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166694'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166677'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166569'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166590'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166604'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166629'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166697'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166545'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166612'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166598'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166596'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166703'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166652'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166696'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166645'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166685'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166625'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166678'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166637'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166555'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166661'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166633'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166657'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166718'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166729'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166709'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166654'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166689'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166651'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166721'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166741'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166734'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166673'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166740'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166758'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166627'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166726'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166695'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166761'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166755'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166659'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166747'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166774'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166702'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166784'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166664'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166665'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166771'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166737'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166763'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166662'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166656'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166723'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166666'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166719'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166708'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166783'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166746'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166693'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166713'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166799'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166698'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166679'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166752'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166683'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166769'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166640'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166681'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166686'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166730'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166731'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166705'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166733'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166749'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166742'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166756'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166791'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166778'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166792'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166675'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166759'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166786'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166704'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166710'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166760'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166692'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166688'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166777'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166754'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166789'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166715'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166810'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166764'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166728'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166800'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166736'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166772'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166663'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166682'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166701'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166676'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166724'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166667'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166668'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166714'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166700'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166717'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166781'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166765'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166691'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166808'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166770'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166750'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166751'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166672'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166812'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166813'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166707'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166780'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166744'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166735'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166727'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166670'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166732'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166821'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166722'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166757'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166816'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166785'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166798'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166699'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166818'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166875'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166690'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166753'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166706'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166794'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166738'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166804'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166790'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166832'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166767'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166739'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166782'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166775'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166819'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166762'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166843'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166839'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166795'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166725'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166748'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166711'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166836'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166805'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166845'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166814'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166776'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166766'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166826'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166860'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166743'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166802'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166806'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166745'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166779'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166712'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166720'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166787'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166803'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166788'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166773'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166825'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166716'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166848'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166811'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166809'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166796'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166797'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166884'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166835'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166827'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166768'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166844'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166840'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166820'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166824'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166858'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166868'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166823'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166801'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166807'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166842'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166856'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166793'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166934'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166830'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166822'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166838'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166817'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166921'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166837'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166849'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166815'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166833'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166846'}, 'resultCode': '00000'}
+</pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+        <tr id='total_row'>
+            <td>总计</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+        <div id='ending'>&nbsp;</div>
+        
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chart'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title : {
+                text: '测试执行情况',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            color: ['#95b75d', 'grey', '#b64645'],
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['通过','失败','错误']
+            },
+            series : [
+                {
+                    name: '测试执行情况',
+                    type: 'pie',
+                    radius : '60%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:1, name:'通过'},
+                        {value:0, name:'失败'},
+                        {value:0, name:'错误'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    
+    </div>
+</body>
+</html>

@@ -1,0 +1,2321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动化测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.9.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.common.min.js"></script>
+    <!-- <script type="text/javascript" src="js/echarts.common.min.js"></script> -->
+    
+    
+<style type="text/css" media="screen">
+    body        { font-family: Microsoft YaHei,Consolas,arial,sans-serif; font-size: 80%; }
+    table       { font-size: 100%; }
+    pre         { white-space: pre-wrap;word-wrap: break-word; }
+
+    /* -- heading ---------------------------------------------------------------------- */
+    h1 {
+        font-size: 16pt;
+        color: gray;
+    }
+    .heading {
+        margin-top: 0ex;
+        margin-bottom: 1ex;
+    }
+
+    .heading .attribute {
+        margin-top: 1ex;
+        margin-bottom: 0;
+    }
+
+    .heading .description {
+        margin-top: 2ex;
+        margin-bottom: 3ex;
+    }
+
+    /* -- css div popup ------------------------------------------------------------------------ */
+    a.popup_link {
+    }
+
+    a.popup_link:hover {
+        color: red;
+    }
+
+    .popup_window {
+        display: none;
+        position: relative;
+        left: 0px;
+        top: 0px;
+        /*border: solid #627173 1px; */
+        padding: 10px;
+        /*background-color: #E6E6D6; */
+        font-family: "Lucida Console", "Courier New", Courier, monospace;
+        text-align: left;
+        font-size: 8pt;
+        /* width: 500px;*/
+    }
+
+    }
+    /* -- report ------------------------------------------------------------------------ */
+    #show_detail_line {
+        margin-top: 3ex;
+        margin-bottom: 1ex;
+    }
+    #result_table {
+        width: 99%;
+    }
+    #header_row {
+        font-weight: bold;
+        color: #303641;
+        background-color: #ebebeb;
+    }
+    #total_row  { font-weight: bold; }
+    .passClass  { background-color: #bdedbc; }
+    .failClass  { background-color: #ffefa4; }
+    .errorClass { background-color: #ffc9c9; }
+    .passCase   { color: #6c6; }
+    .failCase   { color: #FF6600; font-weight: bold; }
+    .errorCase  { color: #c00; font-weight: bold; }
+    .hiddenRow  { display: none; }
+    .testcase   { margin-left: 2em; }
+
+
+    /* -- ending ---------------------------------------------------------------------- */
+    #ending {
+    }
+
+    #div_base {
+                position:absolute;
+                top:0%;
+                left:5%;
+                right:5%;
+                width: auto;
+                height: auto;
+                margin: -15px 0 0 0;
+    }
+</style>
+
+    
+</head>
+<body>
+    <script language="javascript" type="text/javascript"><!--
+    output_list = Array();
+
+    /* level - 0:Summary; 1:Failed; 2:All */
+    function showCase(level) {
+        trs = document.getElementsByTagName("tr");
+        for (var i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            id = tr.id;
+            if (id.substr(0,2) == 'ft') {
+                if (level < 1) {
+                    tr.className = 'hiddenRow';
+                }
+                else {
+                    tr.className = '';
+                }
+            }
+            if (id.substr(0,2) == 'pt') {
+                if (level > 1) {
+                    tr.className = '';
+                }
+                else {
+                    tr.className = 'hiddenRow';
+                }
+            }
+        }
+    }
+
+
+    function showClassDetail(cid, count) {
+        var id_list = Array(count);
+        var toHide = 1;
+        for (var i = 0; i < count; i++) {
+            tid0 = 't' + cid.substr(1) + '.' + (i+1);
+            tid = 'f' + tid0;
+            tr = document.getElementById(tid);
+            if (!tr) {
+                tid = 'p' + tid0;
+                tr = document.getElementById(tid);
+            }
+            id_list[i] = tid;
+            if (tr.className) {
+                toHide = 0;
+            }
+        }
+        for (var i = 0; i < count; i++) {
+            tid = id_list[i];
+            if (toHide) {
+                document.getElementById('div_'+tid).style.display = 'none'
+                document.getElementById(tid).className = 'hiddenRow';
+            }
+            else {
+                document.getElementById(tid).className = '';
+            }
+        }
+    }
+
+
+    function showTestDetail(div_id){
+        var details_div = document.getElementById(div_id)
+        var displayState = details_div.style.display
+        // alert(displayState)
+        if (displayState != 'block' ) {
+            displayState = 'block'
+            details_div.style.display = 'block'
+        }
+        else {
+            details_div.style.display = 'none'
+        }
+    }
+
+
+    function html_escape(s) {
+        s = s.replace(/&/g,'&amp;');
+        s = s.replace(/</g,'&lt;');
+        s = s.replace(/>/g,'&gt;');
+        return s;
+    }
+
+    /* obsoleted by detail in <div>
+    function showOutput(id, name) {
+        var w = window.open("", //url
+                        name,
+                        "resizable,scrollbars,status,width=800,height=450");
+        d = w.document;
+        d.write("<pre>");
+        d.write(html_escape(output_list[id]));
+        d.write("\n");
+        d.write("<a href='javascript:window.close()'>close</a>\n");
+        d.write("</pre>\n");
+        d.close();
+    }
+    */
+    --></script>
+
+    <div id="div_base">
+        
+    <div class='page-header'>
+        <h1>自动化测试报告</h1>
+    <p class='attribute'><strong>开始时间:</strong> 2019-12-20 14:56:00</p>
+<p class='attribute'><strong>运行时长:</strong> 0:00:15.863473</p>
+<p class='attribute'><strong>状态:</strong> 通过 1</p>
+
+    </div>
+    <div style="float: left;width:50%;"><p class='description'>测试报告</p></div>
+    <div id="chart" style="width:50%;height:400px;float:left;"></div>
+
+        
+    <div class="btn-group btn-group-sm">
+        <button class="btn btn-default" onclick='javascript:showCase(0)'>总结</button>
+        <button class="btn btn-default" onclick='javascript:showCase(1)'>失败</button>
+        <button class="btn btn-default" onclick='javascript:showCase(2)'>全部</button>
+    </div>
+    <p></p>
+    <table id='result_table' class="table table-bordered">
+        <colgroup>
+            <col align='left' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+            <col align='right' />
+        </colgroup>
+        <tr id='header_row'>
+            <td>测试套件/测试用例</td>
+            <td>总数</td>
+            <td>通过</td>
+            <td>失败</td>
+            <td>错误</td>
+            <td>查看</td>
+        </tr>
+        
+    <tr class='passClass'>
+        <td>case.test_query_token.query_token</td>
+        <td>1</td>
+        <td>1</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a href="javascript:showClassDetail('c1',1)">详情</a></td>
+    </tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>test_one_equation</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a>
+
+    <div id='div_pt1.1' class="popup_window">
+        <pre>pt1.1: 200 {'data': {'billPayNo': '910166783'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166782'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166781'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166786'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166787'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166784'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166785'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166794'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166789'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166791'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166790'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166788'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166799'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166808'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166810'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166792'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166803'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166816'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166811'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166800'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166795'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166805'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166796'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166798'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166809'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166797'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166793'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166813'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166826'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166801'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166804'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166827'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166802'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166821'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166806'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166817'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166812'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166823'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166815'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166807'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166828'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166832'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166824'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166819'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166818'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166822'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166814'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166848'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166830'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166835'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166837'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166833'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166840'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166825'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166841'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166829'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166831'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166843'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166847'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166820'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166838'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166836'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166839'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166842'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166856'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166858'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166845'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166844'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166846'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166860'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166849'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166834'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166850'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166867'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166868'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166852'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166853'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166877'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166863'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166866'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166865'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166862'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166870'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166864'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166881'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166880'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166879'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166869'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166854'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166857'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166855'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166882'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166888'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166859'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166851'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166861'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166871'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166884'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166878'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166876'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166883'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166892'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166890'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166893'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166886'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166894'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166899'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166914'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166917'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166875'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166921'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166873'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166874'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166904'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166872'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166905'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166902'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166887'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166903'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166885'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166900'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166897'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166907'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166891'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166912'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166927'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166889'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166911'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166898'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166918'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166901'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166922'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166920'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166906'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166924'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166909'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166910'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166913'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166926'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166895'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166916'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166896'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166930'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166934'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166936'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166923'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166915'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166939'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166941'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166908'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166943'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166961'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166925'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166933'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166931'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166928'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166952'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166947'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166932'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166929'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166954'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166935'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166955'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166940'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166919'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166938'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166942'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166946'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166948'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166965'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166966'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166950'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166953'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166937'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166957'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166959'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166945'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166964'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166951'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166944'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166949'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166967'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166962'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166968'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166956'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166958'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166973'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166969'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166963'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166960'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166970'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166972'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166971'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166975'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166974'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166976'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166977'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166980'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166982'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166981'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166979'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166978'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166984'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166987'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166989'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166983'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166986'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166985'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166990'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166992'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910166988'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166996'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166999'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166991'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166993'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910166994'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167004'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167002'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166995'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910166997'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910166998'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167000'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167001'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167005'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167007'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167003'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167006'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167008'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167009'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167010'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167011'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167012'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167013'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167014'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167016'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167015'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167017'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167019'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167020'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167018'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167021'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167022'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167024'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167023'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167027'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167029'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167025'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167028'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167030'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167026'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167032'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167031'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167033'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167034'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167036'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167037'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167035'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167039'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167038'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167040'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167041'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167042'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167043'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167044'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167046'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167050'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167051'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167053'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167049'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167056'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167054'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167047'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167048'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167055'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167045'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167057'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167059'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167060'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167064'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167052'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167058'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167063'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167062'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167061'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167065'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167066'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167071'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167068'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167072'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167070'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167075'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167073'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167076'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167083'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167074'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167082'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167069'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167080'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167086'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167067'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167077'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167078'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167084'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167085'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167081'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167079'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167087'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167088'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167091'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167089'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167090'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167092'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167093'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167097'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167096'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167095'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167094'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167099'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167104'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167102'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167103'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167098'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167106'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167100'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167108'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167114'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167107'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167105'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167110'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167113'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167115'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167101'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167109'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167121'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167128'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167132'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167130'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167120'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167117'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167127'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167118'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167111'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167129'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167134'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167122'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167138'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167133'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167135'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167137'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167124'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167131'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167123'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167126'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167119'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167125'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167112'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167136'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167116'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167139'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167140'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167141'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167142'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167144'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167143'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167146'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167148'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167149'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167147'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167150'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167151'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167145'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167152'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167156'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167154'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167155'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167157'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167153'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167158'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167159'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167160'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167161'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167162'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167163'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167164'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167165'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167166'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167167'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167168'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167170'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167169'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167171'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167174'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167172'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167173'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167175'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167177'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167176'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167178'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167179'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167180'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167181'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167182'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167183'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167184'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167185'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167187'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167186'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167188'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167191'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167189'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167190'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167192'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167194'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167198'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167193'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167201'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167197'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167195'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167196'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167202'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167199'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167200'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167203'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167204'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167206'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167205'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167207'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167208'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167209'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167211'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167210'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167212'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167213'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167214'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167215'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167216'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167222'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167218'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167220'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167219'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167221'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167217'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167226'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167225'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167223'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167224'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167228'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167230'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167227'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167229'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167231'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167232'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167233'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167234'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167237'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167235'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167239'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167236'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167240'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167238'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167246'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167241'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167244'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167242'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167247'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167243'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167245'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167250'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167249'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167248'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167251'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167253'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167254'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167252'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167255'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167256'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167257'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167259'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167258'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167262'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167264'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167261'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167260'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167268'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167263'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167266'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167265'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167267'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167272'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167269'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167270'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167276'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167277'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167274'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167271'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167273'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167275'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167278'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167280'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167279'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167281'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167282'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167283'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167288'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167286'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167284'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167285'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167290'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167289'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167287'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167297'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167301'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167294'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167296'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167293'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167291'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167303'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167298'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167299'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167300'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167292'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167302'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167295'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167317'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167327'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167304'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167311'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167309'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167306'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167313'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167310'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167315'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167316'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167308'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167319'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167314'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167324'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167321'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167330'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167322'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167305'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167312'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167344'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167343'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167318'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167332'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167340'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167337'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167307'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167338'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167329'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167341'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167325'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167345'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167342'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167336'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167328'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167335'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167346'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167323'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167320'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167334'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167339'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167333'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167326'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167349'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167348'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167351'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167347'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167352'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167331'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167350'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167353'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167355'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167356'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167358'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167357'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167359'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167360'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167362'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167361'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167354'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167364'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167363'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167367'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167366'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167365'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167370'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167369'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167368'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167371'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167373'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167374'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167372'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167375'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167378'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167376'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167377'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167379'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167380'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167381'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167382'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167384'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167383'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167385'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167390'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167392'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167387'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167393'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167391'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167389'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167394'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167395'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167388'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167386'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167397'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167396'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167398'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167402'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167401'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167400'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167411'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167399'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167406'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167415'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167403'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167404'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167413'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167410'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167405'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167412'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167409'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167408'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167407'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167416'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167414'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167417'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'resultCode': '4008'}
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167418'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167429'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167433'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167431'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167434'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167424'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167419'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167426'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167422'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167423'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167430'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167427'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167428'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167420'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167425'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167421'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167432'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167450'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167435'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167437'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167445'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167451'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167438'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167439'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167440'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167449'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167446'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167447'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167448'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167444'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167442'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167441'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167443'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167436'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167452'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167453'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167461'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167455'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167468'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167465'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167466'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167458'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167456'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167459'}, 'resultCode': '00000'}
+200 {'resultCode': '3006'}
+200 {'data': {'billPayNo': '910167454'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167457'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167462'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167463'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167460'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167464'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167469'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167472'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167467'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167473'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167475'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167476'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167470'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167474'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167491'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167471'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167477'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167481'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167482'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167479'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167478'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167480'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167483'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167486'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167489'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167485'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167487'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167488'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167484'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167502'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167492'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167490'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167500'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167498'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167495'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167497'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167494'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167499'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167501'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167496'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167503'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167504'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167493'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167520'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167509'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167507'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167508'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167511'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167515'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167512'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167513'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167519'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167516'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167510'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167518'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167523'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167521'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167517'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167522'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167524'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167528'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167527'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167530'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167531'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167529'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167514'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167525'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167534'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167536'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167532'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167537'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167533'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167505'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167535'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167538'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167506'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167539'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167526'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167541'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167540'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167542'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167543'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167544'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167545'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167546'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167547'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167548'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167549'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167550'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167551'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167552'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167553'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167554'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167555'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167557'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167556'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167558'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167559'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167562'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167564'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167563'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167561'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167560'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167567'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167565'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167566'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167569'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167570'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167568'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167571'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167572'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+200 {'data': {'billPayNo': '910167574'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167573'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167575'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167576'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167578'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167577'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167579'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167580'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167582'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167581'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167583'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167585'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167584'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167587'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167586'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167588'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167589'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167590'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167591'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167592'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167593'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167594'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167596'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167595'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167597'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167601'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167598'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167599'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167600'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167602'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167605'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167603'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167606'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167609'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167607'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167610'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167604'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167611'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167612'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167608'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167613'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167614'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167615'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167616'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167621'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167618'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167619'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167620'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167617'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167622'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167624'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167625'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167626'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167628'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167627'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167623'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167629'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167631'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167630'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167632'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167634'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167633'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167635'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167636'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167637'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167639'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167638'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167640'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167641'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167642'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167643'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167644'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167645'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167647'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167646'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167649'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167648'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167650'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167651'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167652'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167654'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167653'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167655'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167656'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167657'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167658'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167660'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167659'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167661'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167664'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167663'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167662'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167667'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167666'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167665'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167668'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167669'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167670'}, 'resultCode': '00000'}
+200 {'resultCode': '4008'}
+插入数据库成功
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167672'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167673'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167671'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167674'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167675'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167676'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167678'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167677'}, 'resultCode': '00000'}
+200 {'data': {'billPayNo': '910167679'}, 'resultCode': '00000'}
+插入数据库成功
+插入数据库成功
+200 {'data': {'billPayNo': '910167680'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167681'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167682'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167683'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167684'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167685'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'resultCode': '3006'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167686'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167687'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167688'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167689'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167690'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167691'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167692'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167694'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167693'}, 'resultCode': '00000'}
+插入数据库成功
+200 {'resultCode': '4008'}
+插入数据库成功
+200 {'data': {'billPayNo': '910167695'}, 'resultCode': '00000'}
+插入数据库成功
+</pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+        <tr id='total_row'>
+            <td>总计</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+        <div id='ending'>&nbsp;</div>
+        
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chart'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title : {
+                text: '测试执行情况',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            color: ['#95b75d', 'grey', '#b64645'],
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['通过','失败','错误']
+            },
+            series : [
+                {
+                    name: '测试执行情况',
+                    type: 'pie',
+                    radius : '60%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:1, name:'通过'},
+                        {value:0, name:'失败'},
+                        {value:0, name:'错误'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    
+    </div>
+</body>
+</html>
